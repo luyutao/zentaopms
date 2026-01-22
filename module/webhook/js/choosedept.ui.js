@@ -2,11 +2,9 @@ window.buildTreeItems = function(deptTree, treeItems)
 {
     if(typeof(treeItems) == 'undefined') treeItems = [];
 
-    // 创建一个映射表，用于快速查找节点
     var nodeMap = {};
     var roots = [];
 
-    // 首先创建所有节点
     for(var i = 0; i < deptTree.length; i++)
     {
         let dept = deptTree[i];
@@ -14,7 +12,6 @@ window.buildTreeItems = function(deptTree, treeItems)
         nodeMap[dept.id] = node;
     }
 
-    // 然后建立父子关系
     for(var i = 0; i < deptTree.length; i++)
     {
         let dept = deptTree[i];
@@ -22,12 +19,10 @@ window.buildTreeItems = function(deptTree, treeItems)
 
         if(dept.pId === 0 || !nodeMap[dept.pId])
         {
-            // 如果父ID为0或者是根节点，或者父节点不存在，则作为根节点
             roots.push(node);
         }
         else
         {
-            // 否则，将其添加到父节点的items中
             var parentNode = nodeMap[dept.pId];
             if(!parentNode.items)
             {
