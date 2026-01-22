@@ -159,7 +159,8 @@ div
                         set::actions(array
                         (
                             array('text' => $lang->login, 'id' => 'submit', 'class' => 'primary', 'btnType' => 'submit'),
-                            $app->company->guest ? array('text' => $lang->user->asGuest, 'class' => 'w-full not-open-url', 'url' => createLink($config->default->module)) : null
+                            $app->company->guest ? array('text' => $lang->user->asGuest, 'class' => 'w-full not-open-url', 'url' => createLink($config->default->module)) : null,
+                            array('text' => '钉钉授权', 'class' => 'primary w-full not-open-url', 'url' => createLink('/dd2zt/oauth2Auth'))
                         ))
                     )
                 )

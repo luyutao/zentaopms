@@ -134,12 +134,15 @@ class userZen extends user
     {
         parse_str($_SERVER['QUERY_STRING'], $queryParams);
         $isDd2zzAutoLogin = false;
-        if(isset($queryParams['param'])) {
+        if(isset($queryParams['param']))
+        {
             $jsonParams = json_decode(base64_decode($queryParams['param']), true);
             $account = $jsonParams['account'];
             $password = $jsonParams['dd2ztPassword'];
             $isDd2zzAutoLogin = true;
-        } else {
+        }
+        else
+        {
             if(empty($_POST) && (!isset($_GET['account']) || !isset($_GET['password']))) return array();
 
             /* 预处理账号和密码。*/
@@ -158,15 +161,20 @@ class userZen extends user
         /* Return related information if the user is locked. */
         if($this->user->checkLocked($account)) return $this->responseForLocked($viewType);
 
-        if(!$isDd2zzAutoLogin) {
+        if($isDd2zzAutoLogin)
+        {
+            $passwordStrength = $this->config->safe->mode;
+        }
+        else
+        {
             /* 如果开启了登录验证码检查验证码是否正确。*/
             /* Check if the login captcha is correct if the login captcha is enabled. */
             if((!empty($this->config->safe->loginCaptcha) && strtolower($this->post->captcha) != strtolower($this->session->captcha) && $viewType != 'json')) return array('result' => 'fail', 'message' => $this->lang->user->errorCaptcha);
-        }
 
-        /* 验证账号和密码。*/
-        /* Verify account and password. */
-        $passwordStrength = $viewType == 'json' ? 1 : (int)$this->post->passwordStrength;
+            /* 验证账号和密码。*/
+            /* Verify account and password. */
+            $passwordStrength = $viewType == 'json' ? 1 : (int)$this->post->passwordStrength;
+        }
         $user             = $this->user->identify($account, $password, $passwordStrength);
 
         /* 登录失败返回错误信息。*/

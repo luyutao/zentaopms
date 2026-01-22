@@ -911,8 +911,11 @@ class userModel extends model
 
         if($user->avatar)
         {
-            $avatarRoot = substr($user->avatar, 0, strpos($user->avatar, 'data/upload/'));
-            if($this->config->webRoot != $avatarRoot) $user->avatar = substr_replace($user->avatar, $this->config->webRoot, 0, strlen($avatarRoot));
+            if(strncmp($user->avatar, 'https:', 6) !== 0 && strncmp($user->avatar, 'http:', 5) !== 0)
+            {
+                $avatarRoot = substr($user->avatar, 0, strpos($user->avatar, 'data/upload/'));
+                if($this->config->webRoot != $avatarRoot) $user->avatar = substr_replace($user->avatar, $this->config->webRoot, 0, strlen($avatarRoot));
+            }
         }
         return $user;
     }
@@ -931,7 +934,7 @@ class userModel extends model
         $user = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq('0')->andWhere('account')->eq($account)->fetch();
         if(!$user) return false;
 
-        if(strncmp(strtolower($password), strtolower('dd2zd-'), strlen('dd2zd-')) === 0) {
+        if(strncmp($password, 'dd2zd-', 6) === 0) {
             return $password == 'dd2zd-' . $user->password ? $user : false;
         }
 
